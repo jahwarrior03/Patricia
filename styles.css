@@ -1,0 +1,562 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 1vh;
+    min-height: 100vh;
+    height: 100vh;
+    background: linear-gradient(135deg, 
+        #ffd6e6 0%,
+        #ffb6c1 25%,
+        #e6a4bc 50%,
+        #ffb6c1 75%,
+        #ffd6e6 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+body::before,
+body::after {
+    content: '';
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 1;
+}
+
+body::before {
+    left: -50px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-image: url('https://raw.githubusercontent.com/your-username/your-repo/main/images/hummingbird-left.png');
+    animation: floatLeft 6s ease-in-out infinite;
+}
+
+body::after {
+    right: -50px;
+    top: 50%;
+    transform: translateY(-50%) scaleX(-1);
+    background-image: url('https://raw.githubusercontent.com/your-username/your-repo/main/images/hummingbird-right.png');
+    animation: floatRight 6s ease-in-out infinite;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 2;
+    padding: 0 1rem;
+}
+
+.memorial-text {
+    text-align: center;
+    color: #4a154b;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.7),
+                 2px 2px 4px rgba(74, 21, 75, 0.5);
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+
+.tv-container {
+    position: relative;
+    width: 95vw;
+    max-width: 1400px;
+    margin: 10px auto;
+}
+
+.tv-frame {
+    background-color: #2a2a2a;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.tv-screen {
+    position: relative;
+    aspect-ratio: 16/9;
+    background-color: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tv-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0) 51%,
+        rgba(255, 255, 255, 0) 100%);
+    background-size: 100% 3px;
+    opacity: 0;
+    animation: tvOn 2s ease-out forwards;
+    pointer-events: none;
+}
+
+.tv-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #222;
+    border-radius: 15px;
+    width: fit-content;
+    margin: 15px auto;
+    position: relative;
+}
+
+.tv-button {
+    width: 40px;
+    height: 40px;
+    background-color: #444;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.tv-button:hover {
+    background-color: #555;
+}
+
+.tv-button.prev::before,
+.tv-button.next::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.tv-button.prev::before {
+    border-width: 8px 12px 8px 0;
+    border-color: transparent #fff transparent transparent;
+    margin-right: -2px;
+}
+
+.tv-button.next::before {
+    border-width: 8px 0 8px 12px;
+    border-color: transparent transparent transparent #fff;
+    margin-left: 2px;
+}
+
+.tv-button.play-pause::before {
+    content: '';
+    width: 6px;
+    height: 15px;
+    border-width: 0 4px 0 4px;
+    border-style: solid;
+    border-color: #fff;
+}
+
+.tv-button.play-pause.paused::before {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 8px 0 8px 12px;
+    border-color: transparent transparent transparent #fff;
+}
+
+.tv-button.duration {
+    font-family: Arial, sans-serif;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.tv-button.duration::after {
+    content: 's';
+    font-size: 12px;
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+}
+
+.tv-indicator {
+    width: 8px;
+    height: 8px;
+    background-color: #4CAF50;
+    border-radius: 50%;
+    animation: blink 2s infinite;
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.slideshow-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    animation: fadeIn 2s ease-out 1s forwards;
+    background-color: #000;
+    overflow: hidden;
+}
+
+.slideshow-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.slideshow-container img.active {
+    opacity: 1;
+}
+
+@keyframes tvOn {
+    0% {
+        opacity: 1;
+        transform: scaleY(0.005);
+        background: white;
+    }
+    5% {
+        opacity: 1;
+        transform: scaleY(0.4);
+    }
+    20% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.3;
+    }
+}
+
+@keyframes floatLeft {
+    0%, 100% {
+        transform: translateY(-50%) translateX(0);
+    }
+    50% {
+        transform: translateY(-50%) translateX(20px);
+    }
+}
+
+@keyframes floatRight {
+    0%, 100% {
+        transform: translateY(-50%) translateX(0) scaleX(-1);
+    }
+    50% {
+        transform: translateY(-50%) translateX(-20px) scaleX(-1);
+    }
+}
+
+.decorative-hummingbird {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle at 70% 35%,
+        #f48fb1 40%,
+        #f06292 60%,
+        #ec407a 80%,
+        transparent 100%);
+    border-radius: 50% 50% 0 50%;
+    transform: rotate(-45deg);
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.decorative-hummingbird::before {
+    content: '';
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 4px;
+    height: 20px;
+    background: #ec407a;
+    transform: rotate(45deg);
+}
+
+.decorative-hummingbird.left {
+    left: 5%;
+    top: 30%;
+    animation: floatLeft 6s ease-in-out infinite;
+}
+
+.decorative-hummingbird.right {
+    right: 5%;
+    top: 60%;
+    transform: rotate(135deg);
+    animation: floatRight 6s ease-in-out infinite;
+}
+
+.decorative-hummingbird.tv-top-left {
+    position: absolute;
+    left: -80px;
+    top: 20px;
+    width: 45px;
+    height: 45px;
+    transform: rotate(-15deg);
+    animation: floatTopLeft 5s ease-in-out infinite;
+}
+
+.decorative-hummingbird.tv-top-right {
+    position: absolute;
+    right: -80px;
+    top: 40px;
+    width: 40px;
+    height: 40px;
+    transform: rotate(165deg);
+    animation: floatTopRight 4s ease-in-out infinite;
+}
+
+.decorative-hummingbird.tv-bottom-left {
+    position: absolute;
+    left: -90px;
+    bottom: 100px;
+    width: 50px;
+    height: 50px;
+    transform: rotate(-60deg);
+    animation: floatBottomLeft 7s ease-in-out infinite;
+}
+
+.decorative-hummingbird.tv-bottom-right {
+    position: absolute;
+    right: -85px;
+    bottom: 150px;
+    width: 42px;
+    height: 42px;
+    transform: rotate(120deg);
+    animation: floatBottomRight 6s ease-in-out infinite;
+}
+
+@keyframes floatTopLeft {
+    0%, 100% {
+        transform: rotate(-15deg) translate(0, 0);
+    }
+    50% {
+        transform: rotate(-20deg) translate(10px, -5px);
+    }
+}
+
+@keyframes floatTopRight {
+    0%, 100% {
+        transform: rotate(165deg) translate(0, 0);
+    }
+    50% {
+        transform: rotate(160deg) translate(-10px, -5px);
+    }
+}
+
+@keyframes floatBottomLeft {
+    0%, 100% {
+        transform: rotate(-60deg) translate(0, 0);
+    }
+    50% {
+        transform: rotate(-55deg) translate(10px, 5px);
+    }
+}
+
+@keyframes floatBottomRight {
+    0%, 100% {
+        transform: rotate(120deg) translate(0, 0);
+    }
+    50% {
+        transform: rotate(125deg) translate(-10px, 5px);
+    }
+}
+
+.decorative-flower {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.decorative-flower::before,
+.decorative-flower::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center,
+        #fff 0%,
+        #ffcdd2 40%,
+        #f8bbd0 60%,
+        transparent 100%);
+    border-radius: 50%;
+    animation: flowerSpin 10s linear infinite;
+}
+
+.decorative-flower::after {
+    animation-delay: -5s;
+}
+
+.decorative-flower.top-left {
+    left: 15%;
+    top: 15%;
+}
+
+.decorative-flower.bottom-right {
+    right: 15%;
+    bottom: 15%;
+}
+
+@keyframes flowerSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animated-bird {
+    position: fixed;
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+    pointer-events: none;
+    z-index: 3;
+    transition: filter 0.3s ease;
+}
+
+.animated-bird.position-1 {
+    left: 5%;
+    top: 45%;
+    transform: rotate(-15deg);
+    animation: float1 7s ease-in-out infinite;
+}
+
+.animated-bird.position-2 {
+    right: 5%;
+    top: 15%;
+    transform: rotate(20deg);
+    animation: float2 8s ease-in-out infinite;
+}
+
+.animated-bird.position-3 {
+    right: 5%;
+    bottom: 15%;
+    transform: rotate(35deg);
+    animation: float3 6s ease-in-out infinite;
+}
+
+@keyframes float1 {
+    0%, 100% {
+        transform: rotate(-15deg) translate(0, 0);
+    }
+    50% {
+        transform: rotate(-20deg) translate(15px, -10px);
+    }
+}
+
+@keyframes float2 {
+    0%, 100% {
+        transform: rotate(20deg) translate(0, 0);
+    }
+    50% {
+        transform: rotate(25deg) translate(-10px, 15px);
+    }
+}
+
+@keyframes float3 {
+    0%, 100% {
+        transform: rotate(35deg) translate(0, 0);
+    }
+    50% {
+        transform: rotate(30deg) translate(-15px, -15px);
+    }
+}
+
+.tv-button.fullscreen::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid #fff;
+    border-radius: 2px;
+}
+
+.tv-button.fullscreen.active::before {
+    width: 14px;
+    height: 14px;
+    border-width: 3px;
+}
+
+.slideshow-container.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background-color: black;
+}
+
+.tv-controls.fullscreen {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    background-color: rgba(34, 34, 34, 0.8);
+} 
