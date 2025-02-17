@@ -45,51 +45,7 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* TV Container Styles */
-.tv-container {
-    position: relative;
-    width: 95vw;
-    max-width: 1400px;
-    margin: 10px auto;
-}
-
-.tv-frame {
-    background-color: #2a2a2a;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-    position: relative;
-}
-
-.tv-screen {
-    position: relative;
-    aspect-ratio: 16/9;
-    background-color: #000;
-    border-radius: 10px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* TV Effect and Slideshow */
-.tv-effect {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom,
-        rgba(255, 255, 255, 0.1) 0%,
-        rgba(255, 255, 255, 0.1) 50%,
-        rgba(255, 255, 255, 0) 51%,
-        rgba(255, 255, 255, 0) 100%);
-    background-size: 100% 3px;
-    opacity: 0;
-    animation: tvOn 2s ease-out forwards;
-    pointer-events: none;
-}
-
+/* Slideshow styles */
 .slideshow-container {
     position: absolute;
     top: 0;
@@ -119,7 +75,51 @@ body {
     opacity: 1;
 }
 
-/* TV Controls */
+/* TV styles */
+.tv-container {
+    position: relative;
+    width: 95vw;
+    max-width: 1400px;
+    margin: 10px auto;
+}
+
+.tv-frame {
+    background-color: #2a2a2a;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.tv-screen {
+    position: relative;
+    aspect-ratio: 16/9;
+    background-color: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tv-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0) 51%,
+        rgba(255, 255, 255, 0) 100%);
+    background-size: 100% 3px;
+    opacity: 0;
+    animation: tvOn 2s ease-out forwards;
+    pointer-events: none;
+}
+
+/* Controls */
 .tv-controls {
     display: flex;
     align-items: center;
@@ -150,7 +150,6 @@ body {
     background-color: #555;
 }
 
-/* Control Button Styles */
 .tv-button.prev::before,
 .tv-button.next::before {
     content: '';
@@ -235,74 +234,147 @@ body {
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
-/* Decorative Elements */
-.animated-bird {
+/* Decorative elements */
+.decorative-flower {
     position: fixed;
-    width: 65px;
-    height: 65px;
-    object-fit: contain;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-    pointer-events: none;
-    z-index: 3;
-    transition: filter 0.3s ease;
-}
-
-.animated-bird.position-1 {
-    left: 5%;
-    top: 45%;
-    transform: rotate(-15deg);
-    animation: float1 7s ease-in-out infinite;
-}
-
-.animated-bird.position-2 {
-    right: 5%;
-    top: 15%;
-    transform: rotate(20deg);
-    animation: float2 8s ease-in-out infinite;
-}
-
-.animated-bird.position-3 {
-    right: 5%;
-    bottom: 15%;
-    transform: rotate(35deg);
-    animation: float3 6s ease-in-out infinite;
-}
-
-.decorative-hummingbird {
-    position: fixed;
-    width: 60px;
-    height: 60px;
-    background: radial-gradient(circle at 70% 35%,
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle at 50% 40%,
         #f48fb1 40%,
         #f06292 60%,
         #ec407a 80%,
         transparent 100%);
-    border-radius: 50% 50% 0 50%;
-    transform: rotate(-45deg);
+    border-radius: 50%;
     opacity: 0.7;
     pointer-events: none;
-    z-index: 1;
+    z-index: 3;
+    animation: float 6s ease-in-out infinite;
 }
 
-.decorative-flower {
+.decorative-flower.top-left {
+    top: 10%;
+    left: 5%;
+    animation-delay: 0s;
+}
+
+.decorative-flower.top-right {
+    top: 10%;
+    right: 5%;
+    animation-delay: 0.5s;
+}
+
+.decorative-flower.middle-top-left {
+    top: 25%;
+    left: 5%;
+    animation-delay: 1s;
+}
+
+.decorative-flower.middle-top-right {
+    top: 25%;
+    right: 5%;
+    animation-delay: 1.5s;
+}
+
+.decorative-flower.middle-left {
+    top: 45%;
+    left: 5%;
+    animation-delay: 2s;
+}
+
+.decorative-flower.middle-right {
+    top: 45%;
+    right: 5%;
+    animation-delay: 2.5s;
+}
+
+.decorative-flower.middle-bottom-left {
+    top: 65%;
+    left: 5%;
+    animation-delay: 3s;
+}
+
+.decorative-flower.middle-bottom-right {
+    top: 65%;
+    right: 5%;
+    animation-delay: 3.5s;
+}
+
+.decorative-flower.bottom-left {
+    bottom: 10%;
+    left: 5%;
+    animation-delay: 4s;
+}
+
+.decorative-flower.bottom-right {
+    bottom: 10%;
+    right: 5%;
+    animation-delay: 4.5s;
+}
+
+.decorative-hummingbird {
     position: fixed;
-    width: 40px;
-    height: 40px;
+    width: 300px;
+    height: 300px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.6;
     pointer-events: none;
-    z-index: 1;
+    z-index: 3;
 }
 
-/* Fullscreen Styles */
+.decorative-hummingbird.left {
+    left: -50px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-image: url('/images/hummingbird-left.png');
+    animation: floatLeft 6s ease-in-out infinite;
+}
+
+.decorative-hummingbird.right {
+    right: -50px;
+    top: 50%;
+    transform: translateY(-50%) scaleX(-1);
+    background-image: url('/images/hummingbird-right.png');
+    animation: floatRight 6s ease-in-out infinite;
+}
+
+.animated-bird {
+    position: fixed;
+    width: 100px;
+    height: auto;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.animated-bird.position-1 {
+    top: 15%;
+    left: 5%;
+    animation: float1 8s ease-in-out infinite;
+}
+
+.animated-bird.position-2 {
+    top: 25%;
+    right: 5%;
+    animation: float2 7s ease-in-out infinite;
+}
+
+.animated-bird.position-3 {
+    bottom: 15%;
+    left: 8%;
+    animation: float3 9s ease-in-out infinite;
+}
+
+/* Fullscreen styles */
 .slideshow-container.fullscreen {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 9999;
-    background-color: black;
+    z-index: 10000;
+    background: #000;
 }
 
 .tv-controls.fullscreen {
@@ -310,66 +382,73 @@ body {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 10000;
+    z-index: 10001;
     background-color: rgba(34, 34, 34, 0.8);
 }
 
 /* Animations */
-@keyframes tvOn {
-    0% {
-        opacity: 1;
-        transform: scaleY(0.005);
-        background: white;
-    }
-    5% {
-        opacity: 1;
-        transform: scaleY(0.4);
-    }
-    20% {
-        opacity: 1;
-        transform: scaleY(1);
-    }
-    90% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0.1;
-    }
-}
-
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
+@keyframes tvOn {
+    0% { opacity: 0; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.1; }
+}
+
 @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+@keyframes floatLeft {
+    0%, 100% { transform: translateY(-50%) translateX(0); }
+    50% { transform: translateY(-50%) translateX(20px); }
+}
+
+@keyframes floatRight {
+    0%, 100% { transform: translateY(-50%) translateX(0) scaleX(-1); }
+    50% { transform: translateY(-50%) translateX(-20px) scaleX(-1); }
 }
 
 @keyframes float1 {
-    0%, 100% {
-        transform: rotate(-15deg) translate(0, 0);
-    }
-    50% {
-        transform: rotate(-20deg) translate(15px, -10px);
-    }
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(20px, -10px); }
 }
 
 @keyframes float2 {
-    0%, 100% {
-        transform: rotate(20deg) translate(0, 0);
-    }
-    50% {
-        transform: rotate(25deg) translate(-10px, 15px);
-    }
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-15px, 15px); }
 }
 
 @keyframes float3 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(25px, -5px); }
+}
+
+@keyframes float {
     0%, 100% {
-        transform: rotate(35deg) translate(0, 0);
+        transform: translate(0, 0) scale(1);
     }
     50% {
-        transform: rotate(30deg) translate(-15px, -15px);
+        transform: translate(10px, -15px) scale(1.1);
     }
+}
+
+.cursor-hummingbird {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    background-image: url('/images/animated-hummingbird-image-0031.gif');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    transition: left 0.1s ease-out, top 0.1s ease-out;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
 } 

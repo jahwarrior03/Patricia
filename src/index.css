@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 1vh;
+    min-height: 100vh;
+    height: 100vh;
+    background: linear-gradient(135deg, 
+        #ffd6e6 0%,
+        #ffb6c1 25%,
+        #e6a4bc 50%,
+        #ffb6c1 75%,
+        #ffd6e6 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Copy all the remaining styles from styles.css */ 
