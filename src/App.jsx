@@ -104,59 +104,89 @@ function App() {
   const [audioError, setAudioError] = useState(null)
   const audioRef = useRef(null)
 
-  // Initialize audio and add event listeners
+  // Initialize audio and attempt immediate autoplay
   useEffect(() => {
-    if (audioRef.current) {
-      console.log('Audio element initialized');
-      
-      const audio = audioRef.current;
-      audio.volume = volume / 100;
+    const initAudio = async () => {
+      if (audioRef.current) {
+        const audio = audioRef.current;
+        audio.volume = volume / 100;
 
-      const handleCanPlay = () => {
-        console.log('Audio can play');
-        setAudioLoaded(true);
-        // Try to autoplay when audio is ready
-        audio.play().catch(error => {
-          console.log("Autoplay failed, waiting for user interaction:", error);
-        });
-      };
+        try {
+          // Try to play immediately
+          await audio.play();
+          setAudioLoaded(true);
+          console.log('Autoplay successful');
+        } catch (error) {
+          console.log('Initial autoplay failed, trying alternative method:', error);
+          
+          // If initial attempt fails, try playing on any user interaction
+          const playOnInteraction = async () => {
+            try {
+              await audio.play();
+              setAudioLoaded(true);
+              console.log('Play on interaction successful');
+              
+              // Remove all event listeners once successful
+              ['click', 'touchstart', 'keydown', 'mousemove'].forEach(event => {
+                document.removeEventListener(event, playOnInteraction);
+              });
+            } catch (err) {
+              console.error('Play on interaction failed:', err);
+            }
+          };
 
-      const handleError = (error) => {
-        console.error('Audio error:', error);
-        setAudioError(error.message);
-      };
-
-      audio.addEventListener('canplay', handleCanPlay);
-      audio.addEventListener('error', handleError);
-
-      return () => {
-        audio.removeEventListener('canplay', handleCanPlay);
-        audio.removeEventListener('error', handleError);
-      };
-    }
-  }, [volume]);
-
-  // Handle user interaction to enable audio if autoplay failed
-  useEffect(() => {
-    const startAudio = () => {
-      if (audioRef.current && !audioLoaded) {
-        audioRef.current.play()
-          .then(() => {
-            setAudioLoaded(true);
-            document.removeEventListener('click', startAudio);
-          })
-          .catch(error => {
-            console.error('Audio play failed:', error);
-            setAudioError(error.message);
+          // Add listeners for various user interactions
+          ['click', 'touchstart', 'keydown', 'mousemove'].forEach(event => {
+            document.addEventListener(event, playOnInteraction, { once: true });
           });
+        }
       }
     };
 
-    document.addEventListener('click', startAudio);
-    return () => {
-      document.removeEventListener('click', startAudio);
-    };
+    initAudio();
+  }, []);
+
+  // Handle volume changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
+
+  const handleVolumeChange = useCallback((e) => {
+    const newVolume = Number(e.target.value);
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume / 100;
+      if (newVolume === 0) {
+        setIsMuted(true);
+        audioRef.current.pause();
+      } else {
+        setIsMuted(false);
+        if (audioLoaded) {
+          audioRef.current.play().catch(console.error);
+        }
+      }
+    }
   }, [audioLoaded]);
+
+  const toggleMute = useCallback(() => {
+    if (audioRef.current) {
+      if (isMuted) {
+        audioRef.current.volume = volume / 100;
+        audioRef.current.play()
+          .then(() => {
+            setAudioLoaded(true);
+            setIsMuted(false);
+          })
+          .catch(console.error);
+      } else {
+        audioRef.current.volume = 0;
+        audioRef.current.pause();
+        setIsMuted(true);
+      }
+    }
+  }, [isMuted, volume]);
 
   // Preload images
   useEffect(() => {
@@ -250,59 +280,6 @@ function App() {
     }
   }, []);
 
-  const handleVolumeChange = useCallback((e) => {
-    const newVolume = Number(e.target.value);
-    setVolume(newVolume);
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume / 100;
-      if (newVolume === 0) {
-        setIsMuted(true);
-        audioRef.current.pause();
-      } else {
-        setIsMuted(false);
-        if (audioLoaded) {
-          audioRef.current.play().catch(console.error);
-        }
-      }
-    }
-  }, [audioLoaded]);
-
-  const toggleMute = useCallback(() => {
-    if (audioRef.current) {
-      console.log('Toggle mute clicked');
-      if (!audioLoaded) {
-        console.log('First play attempt');
-        audioRef.current.play()
-          .then(() => {
-            console.log('First play successful');
-            setAudioLoaded(true);
-            setIsMuted(false);
-            audioRef.current.volume = volume / 100;
-          })
-          .catch(error => {
-            console.error('First play failed:', error);
-            setAudioError(error.message);
-          });
-      } else {
-        if (isMuted) {
-          console.log('Unmuting');
-          audioRef.current.volume = volume / 100;
-          audioRef.current.play()
-            .then(() => console.log('Unmute successful'))
-            .catch(error => {
-              console.error('Unmute failed:', error);
-              setAudioError(error.message);
-            });
-        } else {
-          console.log('Muting');
-          audioRef.current.volume = 0;
-          audioRef.current.pause();
-        }
-        setIsMuted(prev => !prev);
-      }
-    }
-  }, [isMuted, audioLoaded, volume]);
-
   return (
     <>
       <audio
@@ -311,6 +288,7 @@ function App() {
         loop
         preload="auto"
         autoPlay
+        playsInline
       />
       <div 
         className="cursor-hummingbird"
