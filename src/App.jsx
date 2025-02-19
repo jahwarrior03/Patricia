@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import './App.css'
 
 // Array of image paths
@@ -98,6 +98,83 @@ function App() {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [durationIndex, setDurationIndex] = useState(1)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
+  const [isMuted, setIsMuted] = useState(false)
+  const [audioLoaded, setAudioLoaded] = useState(false)
+  const [volume, setVolume] = useState(50)
+  const [audioError, setAudioError] = useState(null)
+  const audioRef = useRef(null)
+
+  // Initialize audio and add event listeners
+  useEffect(() => {
+    if (audioRef.current) {
+      console.log('Audio element initialized');
+      
+      const audio = audioRef.current;
+      audio.volume = volume / 100;
+
+      const handleCanPlay = () => {
+        console.log('Audio can play');
+        setAudioLoaded(true);
+      };
+
+      const handleError = (error) => {
+        console.error('Audio error:', error);
+        setAudioError(error.message);
+      };
+
+      const handlePlay = () => {
+        console.log('Audio started playing');
+      };
+
+      const handleLoadStart = () => {
+        console.log('Audio started loading');
+      };
+
+      audio.addEventListener('canplay', handleCanPlay);
+      audio.addEventListener('error', handleError);
+      audio.addEventListener('play', handlePlay);
+      audio.addEventListener('loadstart', handleLoadStart);
+
+      return () => {
+        audio.removeEventListener('canplay', handleCanPlay);
+        audio.removeEventListener('error', handleError);
+        audio.removeEventListener('play', handlePlay);
+        audio.removeEventListener('loadstart', handleLoadStart);
+      };
+    }
+  }, []);
+
+  // Handle user interaction to start audio
+  useEffect(() => {
+    const startAudio = async () => {
+      if (audioRef.current && !audioLoaded) {
+        try {
+          console.log('Attempting to play audio...');
+          await audioRef.current.play();
+          console.log('Audio play successful');
+          setAudioLoaded(true);
+          document.removeEventListener('click', startAudio);
+        } catch (error) {
+          console.error('Audio play failed:', error);
+          setAudioError(error.message);
+        }
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden && audioRef.current && audioLoaded && !isMuted) {
+        audioRef.current.play().catch(console.error);
+      }
+    };
+
+    document.addEventListener('click', startAudio);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('click', startAudio);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [audioLoaded, isMuted]);
 
   // Preload images
   useEffect(() => {
@@ -191,8 +268,71 @@ function App() {
     }
   }, []);
 
+  const handleVolumeChange = useCallback((e) => {
+    const newVolume = Number(e.target.value);
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume / 100;
+      if (newVolume === 0) {
+        setIsMuted(true);
+        audioRef.current.pause();
+      } else {
+        setIsMuted(false);
+        if (audioLoaded) {
+          audioRef.current.play().catch(console.error);
+        }
+      }
+    }
+  }, [audioLoaded]);
+
+  const toggleMute = useCallback(() => {
+    if (audioRef.current) {
+      console.log('Toggle mute clicked');
+      if (!audioLoaded) {
+        console.log('First play attempt');
+        audioRef.current.play()
+          .then(() => {
+            console.log('First play successful');
+            setAudioLoaded(true);
+            setIsMuted(false);
+            audioRef.current.volume = volume / 100;
+          })
+          .catch(error => {
+            console.error('First play failed:', error);
+            setAudioError(error.message);
+          });
+      } else {
+        if (isMuted) {
+          console.log('Unmuting');
+          audioRef.current.volume = volume / 100;
+          audioRef.current.play()
+            .then(() => console.log('Unmute successful'))
+            .catch(error => {
+              console.error('Unmute failed:', error);
+              setAudioError(error.message);
+            });
+        } else {
+          console.log('Muting');
+          audioRef.current.volume = 0;
+          audioRef.current.pause();
+        }
+        setIsMuted(prev => !prev);
+      }
+    }
+  }, [isMuted, audioLoaded, volume]);
+
   return (
     <>
+      <audio
+        ref={audioRef}
+        src="https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/funeral-165257.mp3"
+        loop
+        preload="auto"
+        onError={(e) => {
+          console.error('Audio element error:', e);
+          setAudioError(e.message);
+        }}
+      />
       <div 
         className="cursor-hummingbird"
         style={{
@@ -246,6 +386,22 @@ function App() {
                 title="Change Slideshow Duration"
                 onClick={changeDuration}
               >{duration}</div>
+              <div className="volume-control">
+                <div 
+                  className={`tv-button volume ${isMuted ? 'muted' : ''}`} 
+                  title="Toggle Sound"
+                  onClick={toggleMute}
+                ></div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={isMuted ? 0 : volume}
+                  onChange={handleVolumeChange}
+                  className="volume-slider"
+                  title="Adjust Volume"
+                />
+              </div>
               <div 
                 className={`tv-button fullscreen ${isFullscreen ? 'active' : ''}`} 
                 title="Toggle Fullscreen"

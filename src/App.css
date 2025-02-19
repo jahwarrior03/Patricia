@@ -143,6 +143,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
     transition: background-color 0.3s ease;
 }
 
@@ -219,6 +220,44 @@ body {
     width: 14px;
     height: 14px;
     border-width: 3px;
+}
+
+/* Volume button styles */
+.tv-button.volume {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tv-button.volume::before {
+    content: '';
+    width: 8px;
+    height: 12px;
+    background: #fff;
+    clip-path: polygon(0 30%, 35% 30%, 100% 0, 100% 100%, 35% 70%, 0 70%);
+    margin-left: -2px;
+}
+
+.tv-button.volume::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    width: 10px;
+    height: 10px;
+    border: 2px solid #fff;
+    border-left: none;
+    border-radius: 0 50% 50% 0;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.tv-button.volume.muted::after {
+    opacity: 0;
+}
+
+.tv-button.volume.muted::before {
+    opacity: 0.5;
 }
 
 .tv-indicator {
@@ -451,4 +490,72 @@ body {
     transform: translate(-50%, -50%) rotate(-45deg);
     transition: left 0.1s ease-out, top 0.1s ease-out;
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.volume-slider {
+    width: 0;
+    height: 4px;
+    background: #444;
+    border-radius: 2px;
+    -webkit-appearance: none;
+    transition: width 0.3s ease;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.volume-control:hover .volume-slider {
+    width: 80px;
+    opacity: 1;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.volume-slider::-ms-thumb {
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-runnable-track {
+    height: 4px;
+    background: #444;
+    border-radius: 2px;
+}
+
+.volume-slider::-moz-range-track {
+    height: 4px;
+    background: #444;
+    border-radius: 2px;
+}
+
+.volume-slider::-ms-track {
+    height: 4px;
+    background: #444;
+    border-radius: 2px;
 } 
