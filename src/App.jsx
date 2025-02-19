@@ -68,7 +68,24 @@ const images = [
     'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_08.jpg',
     'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_07.jpg',
     'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_06.jpeg',
-    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_05.jpg'
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_05.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_04.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_03.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_02.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_01.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_0.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_1.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_2.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_3.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_4.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_5.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_6.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_7.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_8.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_9.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_10.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_11.jpg',
+    'https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/IMG_12.jpg'
 ];
 
 const durations = [3, 5, 10, 15]; // Available durations in seconds
