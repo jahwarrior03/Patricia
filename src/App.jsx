@@ -115,6 +115,10 @@ function App() {
       const handleCanPlay = () => {
         console.log('Audio can play');
         setAudioLoaded(true);
+        // Try to autoplay when audio is ready
+        audio.play().catch(error => {
+          console.log("Autoplay failed, waiting for user interaction:", error);
+        });
       };
 
       const handleError = (error) => {
@@ -122,59 +126,37 @@ function App() {
         setAudioError(error.message);
       };
 
-      const handlePlay = () => {
-        console.log('Audio started playing');
-      };
-
-      const handleLoadStart = () => {
-        console.log('Audio started loading');
-      };
-
       audio.addEventListener('canplay', handleCanPlay);
       audio.addEventListener('error', handleError);
-      audio.addEventListener('play', handlePlay);
-      audio.addEventListener('loadstart', handleLoadStart);
 
       return () => {
         audio.removeEventListener('canplay', handleCanPlay);
         audio.removeEventListener('error', handleError);
-        audio.removeEventListener('play', handlePlay);
-        audio.removeEventListener('loadstart', handleLoadStart);
       };
     }
-  }, []);
+  }, [volume]);
 
-  // Handle user interaction to start audio
+  // Handle user interaction to enable audio if autoplay failed
   useEffect(() => {
-    const startAudio = async () => {
+    const startAudio = () => {
       if (audioRef.current && !audioLoaded) {
-        try {
-          console.log('Attempting to play audio...');
-          await audioRef.current.play();
-          console.log('Audio play successful');
-          setAudioLoaded(true);
-          document.removeEventListener('click', startAudio);
-        } catch (error) {
-          console.error('Audio play failed:', error);
-          setAudioError(error.message);
-        }
-      }
-    };
-
-    const handleVisibilityChange = () => {
-      if (!document.hidden && audioRef.current && audioLoaded && !isMuted) {
-        audioRef.current.play().catch(console.error);
+        audioRef.current.play()
+          .then(() => {
+            setAudioLoaded(true);
+            document.removeEventListener('click', startAudio);
+          })
+          .catch(error => {
+            console.error('Audio play failed:', error);
+            setAudioError(error.message);
+          });
       }
     };
 
     document.addEventListener('click', startAudio);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
     return () => {
       document.removeEventListener('click', startAudio);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [audioLoaded, isMuted]);
+  }, [audioLoaded]);
 
   // Preload images
   useEffect(() => {
@@ -328,10 +310,7 @@ function App() {
         src="https://raw.githubusercontent.com/jahwarrior03/Patricia/refs/heads/main/assets/funeral-165257.mp3"
         loop
         preload="auto"
-        onError={(e) => {
-          console.error('Audio element error:', e);
-          setAudioError(e.message);
-        }}
+        autoPlay
       />
       <div 
         className="cursor-hummingbird"
